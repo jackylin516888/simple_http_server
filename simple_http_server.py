@@ -247,6 +247,10 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         '.h': 'text/plain',
     })
 
+def set_web_root(path):
+    if "vdi_aws" not in path:
+        path +="/vdi_aws/"
+    return path
 
 def translate_path(path):
     """Translate a /-separated PATH to the local filename syntax.
@@ -261,6 +265,7 @@ def translate_path(path):
     words = path.split('/')
     words = filter(None, words)
     path = os.getcwd()
+    path = set_web_root(path)
     for word in words:
         drive, word = os.path.splitdrive(word)
         head, word = os.path.split(word)
@@ -278,7 +283,7 @@ def _argparse():
     parser = argparse.ArgumentParser()
     parser.add_argument('--bind', '-b', metavar='ADDRESS', default='0.0.0.0', help='Specify alternate bind address [default: all interfaces]')
     parser.add_argument('--version', '-v', action='version', version=__version__)
-    parser.add_argument('port', action='store', default=8000, type=int, nargs='?', help='Specify alternate port [default: 8000]')
+    parser.add_argument('port', action='store', default=8080, type=int, nargs='?', help='Specify alternate port [default: 8000]')
     return parser.parse_args()
 
 def main():
